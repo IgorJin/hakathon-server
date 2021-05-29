@@ -39,9 +39,7 @@ exports.authController = {
       });
       newUser.save();
       const { accessToken, refreshToken } = createTokens(newUser._id);
-      res.cookie("refreshToken", refreshToken, { httpOnly: true });
-      res.cookie("accessToken", accessToken, { httpOnly: true });
-      res.status(200).json(newUser);
+      res.status(200).json({ accessToken, refreshToken });
     } catch (error) {
       res.status(500).json({ message: "server error" });
     }
@@ -58,9 +56,8 @@ exports.authController = {
       if (!isMatch) res.status(400).json({ message: "пароли не совпадают" });
 
       const { accessToken, refreshToken } = createTokens(user._id);
-      res.cookie("refreshToken", refreshToken, { httpOnly: true });
-      res.cookie("accessToken", accessToken, { httpOnly: true });
-      res.status(200).json(user);
+
+      res.status(200).json({ accessToken, refreshToken });
     } catch (error) {
       res.status(500).json({ message: "server error" });
     }
@@ -68,7 +65,6 @@ exports.authController = {
   refresh: async (req, res) => {
     const userID = req.userID;
     const { accessToken, refreshToken } = createTokens(userID);
-    res.cookie("refreshToken", refreshToken, { httpOnly: true });
-    res.cookie("accessToken", accessToken, { httpOnly: true });
+    res.status(200).json({ accessToken, refreshToken });
   },
 };
