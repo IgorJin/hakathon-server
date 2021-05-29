@@ -1,0 +1,5 @@
+{
+  "jwt_secret": "dcatsecret3475",
+  "access_expireIn": "1h",
+  "refresh_expireIn": "24h"
+}
