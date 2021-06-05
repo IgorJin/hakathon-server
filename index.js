@@ -5,10 +5,9 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 
 const authRouter = require("./mvc/routes/authRouter");
-const eventRouter = require("./mvc/routes/eventRouter");
-const departmentRouter = require("./mvc/routes/departmentRouter");
-const leaderboardRouter = require("./mvc/routes/leaderboardRouter");
-const pointsRouter = require("./mvc/routes/pointsRouter");
+const eventRouter = require("./mvc/routes/eventRouter"); 
+const departmentRouter = require("./mvc/routes/departmentRouter"); 
+
 const app = express();
 
 app.use(logger("dev"));
@@ -17,24 +16,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", (req, res) => res.status(200).send("SERVER IS ALIVE"));
-
 /*
 //
-  ROTES
+  ROUTES
 //
 */
 
+app.use("/alive", (req, res) => res.status(200).send('SERVER IS ALIVE'))
+
 //AUTH
 app.use("/api/auth", authRouter);
-app.use("/api/leaderboard", leaderboardRouter);
-app.use("/api/points", pointsRouter);
 
 //DEPARTMENT
 app.use("/api/department", departmentRouter);
 
+
 //EVENT
 app.use("/api/event", eventRouter);
+
 
 /*
 //

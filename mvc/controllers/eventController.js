@@ -1,4 +1,5 @@
 const Event = require("../models/EventModel");
+const {USER_STATUS} = require("../../common/consts")
 
 const findEventById = async (id) => {
   return await Event.findOne({ _id: id });
@@ -9,6 +10,7 @@ const findEvents = async () => {
 };
 
 async function getEvents(req, res) {
+
   const { id } = req.params;
   try {
     if (id) {
@@ -41,8 +43,22 @@ async function editEvent(req, res) {
   res.send("edit event");
 }
 
+async function addUserToEvent(req, res) {
+  try {
+    const { eventId, userId, team, status } = req.body;
+
+    const event = await Event.updateOne({ creator, departmentId, sportId });
+
+    return res.send("add event" + event.id);
+  } catch (e) {
+    return res.sendStatus(400);
+  }
+}
+
 exports.eventController = {
   getEvents,
   createEvent,
   editEvent,
+  addUserToEvent,
+  checkIn,
 };
