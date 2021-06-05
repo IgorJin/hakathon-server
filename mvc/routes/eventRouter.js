@@ -12,4 +12,6 @@ router.post("/add-user", eventController.addUserToEvent);
 
 router.post("/check-in", eventController.checkIn);
 
+router.post("/check-out", eventController.checkIn);
+
 module.exports = router;

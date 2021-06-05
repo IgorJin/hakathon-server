@@ -3,7 +3,6 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 const Event = mongoose.Schema({
   start: { type: Date, default: Date.now },
-  start: { type: Date, default: Date.now },
   office: { type: String, require: true },
   sportId: { type: String, require: true },
   isEnded: { type: Boolean },
@@ -11,8 +10,6 @@ const Event = mongoose.Schema({
   lon: { type: String, default: 0 },
   participants: { type: [{ type: ObjectId }] },
   protocol: { type: [{ participantId: ObjectId, appearance: String }] },
-  lat: String,
-  lon: String,
 });
 
 // Event.methods.toDTO = function () {

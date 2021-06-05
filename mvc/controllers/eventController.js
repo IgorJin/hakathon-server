@@ -103,25 +103,43 @@ const isGoodCoords = (lat, lon, event) =>
 const isInTimeBefore = (event) =>
   Math.abs(new Date(event.start).getTime() - Date.now()) < 9e5;
 
+const isInTimeAfter = (event) =>
+  Math.abs(Date.now() - new Date(event.start).getTime()) < 9e5;
+
+
+async function checkFactory(body, type = "in") {
+  const { eventId, userId, lat, lon } = req.body;
+
+  const event = await findEventById(eventId);
+  if (!event) throw Error;
+
+  if (!isGoodCoords(lat, lon, event)) throw Error("bad coordinates");
+  if (type === 'in' && !isInTimeBefore(event) || !isInTimeAfter(event)) throw Error("bad time");
+
+  await Participant.updateOne(
+    { userId },
+    {
+      $set: {
+        checked: true,
+      },
+    }
+  );
+  return true;
+}
+
+async function checkOut(req, res) {
+  try {
+    await checkFactory(req.body, "out")
+    return res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(400);
+  }
+}
+
 async function checkIn(req, res) {
   try {
-    const { eventId, userId, lat, lon } = req.body;
-
-    const event = await findEventById(eventId);
-    if (!event) throw Error;
-
-    if (!isGoodCoords(lat, lon, event)) throw Error("bad coordinates");
-    if (!isInTimeBefore(event)) throw Error("bad time");
-
-    await Participant.updateOne(
-      { userId },
-      {
-        $set: {
-          checked: true,
-        },
-      }
-    );
-
+    await checkFactory(req.body, "in")
     return res.sendStatus(200);
   } catch (e) {
     console.log(e);
