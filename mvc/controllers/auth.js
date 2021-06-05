@@ -2,6 +2,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const { UserSchema } = require("../models/UserModel");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "dcatserver@gmail.com",
+    pass: "dcatserver1",
+  },
+});
 
 const createAccessToken = (userID) => {
   return jwt.sign({ userID }, config.get("jwt_secret"), {
@@ -24,22 +33,30 @@ exports.authController = {
   signUp: async (req, res) => {
     try {
       const { email, username, password } = req.body;
-      if (
-        (await UserSchema.findOne({ email })) ||
-        (await UserSchema.findOne({ username }))
-      ) {
-        res.status(400).json({ message: "Такой пользователь уже есть" });
-      }
+      // if (
+      //   (await UserSchema.findOne({ email })) ||
+      //   (await UserSchema.findOne({ username }))
+      // ) {
+      //   res.status(400).json({ message: "Такой пользователь уже есть" });
+      // }
+      // const hashedPassword = await bcrypt.hash(password, 5);
+      // const newUser = new UserSchema({
+      //   email,
+      //   password: hashedPassword,
+      //   username,
+      // });
+      // newUser.save();
+      // const { accessToken, refreshToken } = createTokens(newUser._id);
+      // res.status(200).json({ accessToken, refreshToken });
+      const mailOption = {
+        from: "dcatserver@gmail.com",
+        to: email,
+        subject: "Письмо отправленно через nodejs",
+        text: "Ваш пароль для входа: 12345",
+      };
 
-      const hashedPassword = await bcrypt.hash(password, 5);
-      const newUser = new UserSchema({
-        email,
-        password: hashedPassword,
-        username,
-      });
-      newUser.save();
-      const { accessToken, refreshToken } = createTokens(newUser._id);
-      res.status(200).json({ accessToken, refreshToken });
+      transporter.sendMail(mailOption);
+      res.status(200);
     } catch (error) {
       res.status(500).json({ message: "server error" });
     }
