@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const authRouter = require("./mvc/routes/authRouter");
 const eventRouter = require("./mvc/routes/eventRouter"); 
+const departmentRouter = require("./mvc/routes/departmentRouter"); 
 
 const app = express();
 
@@ -23,6 +24,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //AUTH
 app.use("/api/auth", authRouter);
+
+//DEPARTMENT
+app.use("/api/department", departmentRouter);
+
 
 //EVENT
 app.use("/api/event", eventRouter);

@@ -5,7 +5,7 @@ const findEventById = async (id) => {
 };
 
 const findEvents = async () => {
-  return await Event.findOne();
+  return await Event.find();
 };
 
 async function getEvents(req, res) {
@@ -26,7 +26,16 @@ async function getEvents(req, res) {
 }
 
 async function createEvent(req, res) {
-  res.send("add event");
+  console.log(req.body);
+  try {
+    const { userId: creator, departmentId, sportId } = req.body;
+
+    const event = await Event.create({ creator, departmentId, sportId });
+
+    return res.send("add event" + event.id);
+  } catch (e) {
+    return res.sendStatus(400);
+  }
 }
 
 async function editEvent(req, res) {
