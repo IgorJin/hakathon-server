@@ -7,7 +7,8 @@ const mongoose = require("mongoose");
 const authRouter = require("./mvc/routes/authRouter");
 const eventRouter = require("./mvc/routes/eventRouter");
 const departmentRouter = require("./mvc/routes/departmentRouter");
-
+const leaderboardRouter = require("./mvc/routes/leaderboardRouter");
+const pointsRouter = require("./mvc/routes/pointsRouter");
 const app = express();
 
 app.use(logger("dev"));
