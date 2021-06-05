@@ -1,5 +1,23 @@
 const Event = require("../models/EventModel");
+const Participant = require("../models/ParticipantModel");
 const { USER_STATUS, USER_TEAM } = require("../../common/consts");
+
+const getOrCreate = async (socket, team = 0, status = 0, userId = 0) => {
+  return await Participants.findOneAndUpdate(
+    { userId },
+    {
+      $set: {
+        connection: "online",
+        checked: true,
+        socketId: socket.id,
+        userId,
+        team,
+        status,
+      },
+    },
+    { new: true }
+  );
+};
 
 const findEventById = async (id) => {
   return await Event.findOne({ _id: id });
@@ -61,14 +79,11 @@ async function editEvent(req, res) {
 async function addUserToEvent(req, res) {
   try {
     const { eventId, userId, team, status } = req.body;
-    const participant = {
-      userId,
-      team,
-      status,
-    };
+
+    const participant = await getOrCreate("", team, status, userId);
     const event = await Event.updateOne(
       { _id: eventId },
-      { $push: { participants: participant } }
+      { $push: { participants: participant._id } }
     );
 
     return res.status(200).send("add user to event");
@@ -77,9 +92,53 @@ async function addUserToEvent(req, res) {
   }
 }
 
+async function endEvent(req, res) {
+  try {
+    const { eventId } = req.body;
+
+    const event = await Event.updateOne({ _id: eventId }, { isEnded: true });
+
+    return res.status(200).send("ended event");
+  } catch (e) {
+    return res.sendStatus(400);
+  }
+}
+
+async function setHostToEvent(req, res) {
+  try {
+    const { eventId, hostId } = req.body;
+
+    const event = await Event.updateOne({ _id: eventId }, { hostId });
+
+    return res.status(200).send("ended event");
+  } catch (e) {
+    return res.sendStatus(400);
+  }
+}
+
+async function getState(event) {
+  try {
+    if (!event) res.send(400).json({ message: "событие не найдено" });
+    const participants = event.participants;
+
+    return await Promise.all(
+      participants.map((p) => Participant.find({ _id: p }))
+    );
+  } catch (e) {
+    return res.sendStatus(400);
+  }
+  const response = await findEvents();
+
+  return res.status(200).send(response);
+}
+
 exports.eventController = {
   getEvents,
   createEvent,
   editEvent,
+  setHostToEvent,
   addUserToEvent,
+  endEvent,
+  findEventById,
+  getState,
 };
