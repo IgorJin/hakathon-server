@@ -16,13 +16,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", (req, res) => res.status(200).send('SERVER IS ALIVE'))
-
 /*
 //
-  ROTES
+  ROUTES
 //
 */
+
+app.use("/alive", (req, res) => res.status(200).send('SERVER IS ALIVE'))
 
 //AUTH
 app.use("/api/auth", authRouter);
