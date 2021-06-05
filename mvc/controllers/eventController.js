@@ -15,23 +15,39 @@ const findEventById = async (id) => {
   return await Event.findOne({ _id: id });
 };
 
-const findEvents = async () => {
-  return await Event.find();
+const findEvents = async (limit, skip, moth) => {
+  if (moth) {
+    const events = await Event.find({})
+      .limit(limit)
+      .skip(skip)
+      .sort({ _id: -1 }); //! добавить сортировку по месяцу в запросе
+    return events.filter((e) => new Date(e.date).getMonth() + 1 === moth);
+  }
+
+  if (!moth)
+    return await Event.find({}).limit(limit).skip(skip).sort({ _id: -1 });
 };
 
 async function getEvents(req, res) {
-  const { id } = req.params;
+  const { id, limit = 5, page = 1, moth } = req.params;
+  const skip = limit * (page - 1);
+
   try {
     if (id) {
       const event = await findEventById(id);
 
       if (!event) res.send(400).json({ message: "событие не найдено" });
-      return res.send("get event" + id);
+      return res.json(event);
     }
+    if (moth) {
+      const events = await findEvents(limit, skip, moth);
+      return res.json(events);
+    }
+    const response = await findEvents(limit, skip);
+    return res.json(response);
   } catch (e) {
     return res.sendStatus(400);
   }
-  const response = await findEvents();
 
   return res.status(200).send(response);
 }

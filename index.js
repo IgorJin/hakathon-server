@@ -18,6 +18,7 @@ const io = require("socket.io")(server, {
 const authRouter = require("./mvc/routes/authRouter");
 const eventRouter = require("./mvc/routes/eventRouter");
 const departmentRouter = require("./mvc/routes/departmentRouter");
+const userRouter = require("./mvc/routes/userRouter");
 const eventSocketRouter = require("./mvc/routes/eventSocketRouter");
 
 io.on("connection", (socket) => {
@@ -51,6 +52,10 @@ app.use("/api/department", departmentRouter);
 //EVENT
 app.use("/api/event", eventRouter);
 
+//USER
+app.use("/api/user", userRouter);
+
+app.use(errorHandler);
 /*
 //
   START SERVER

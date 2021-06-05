@@ -11,17 +11,19 @@ const Event = mongoose.Schema({
   lon: { type: String, default: 0 },
   participants: { type: [{ type: ObjectId }] },
   protocol: { type: [{ participantId: ObjectId, appearance: String }] },
+  lat: String,
+  lon: String,
 });
 
-Event.methods.toDTO = function () {
-  return {
-    id: this.id,
-    createdAt: this.createdAt,
-    creator: this.creator,
-    departmentId: this.departmentId,
-    sportId: this.sportId,
-    participants: this.participants,
-  };
-};
+// Event.methods.toDTO = function () {
+//   return {
+//     id: this.id,
+//     createdAt: this.createdAt,
+//     creator: this.creator,
+//     departmentId: this.departmentId,
+//     sportId: this.sportId,
+//     participants: this.participants,
+//   };
+// };
 
 module.exports = mongoose.model("Event", Event);
