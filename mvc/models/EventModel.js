@@ -3,9 +3,9 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 const Event = mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
-  creator: { type: ObjectId },
-  departmentId: { type: ObjectId, require: true },
+  office: { type: String, require: true },
   sportId: { type: String, require: true },
+  date: { type: Date, require: true },
   participants: { type: [{ userId: ObjectId, team: String, status: String }] },
   protocol: { type: [{ participantId: ObjectId, appearance: String }] },
 });

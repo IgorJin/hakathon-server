@@ -5,9 +5,9 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 
 const authRouter = require("./mvc/routes/authRouter");
-const eventRouter = require("./mvc/routes/eventRouter"); 
-const departmentRouter = require("./mvc/routes/departmentRouter"); 
-
+const eventRouter = require("./mvc/routes/eventRouter");
+const departmentRouter = require("./mvc/routes/departmentRouter");
+const errorHandler = require("./mvc/middlewares/errorHandlingMiddleware");
 const app = express();
 
 app.use(logger("dev"));
@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //
 */
 
-app.use("/alive", (req, res) => res.status(200).send('SERVER IS ALIVE'))
+app.use("/alive", (req, res) => res.status(200).send("SERVER IS ALIVE"));
 
 //AUTH
 app.use("/api/auth", authRouter);
@@ -30,16 +30,11 @@ app.use("/api/auth", authRouter);
 //DEPARTMENT
 app.use("/api/department", departmentRouter);
 
-
 //EVENT
 app.use("/api/event", eventRouter);
 
+app.use(errorHandler);
 
-/*
-//
-  START SERVER
-//
-*/
 const PORT = process.env.PORT || 3001;
 
 const start = async () => {
