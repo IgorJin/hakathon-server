@@ -7,9 +7,8 @@ const Event = mongoose.Schema({
   departmentId: { type: ObjectId, require: true },
   sportId: { type: String, require: true },
   participants: { type: [{ userId: ObjectId, team: String, status: String }] },
-  protocol: {type: [{ participantId: ObjectId, appearance: String }]}
+  protocol: { type: [{ participantId: ObjectId, appearance: String }] },
 });
-
 
 Event.methods.toDTO = function () {
   return {
