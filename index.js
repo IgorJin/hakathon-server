@@ -26,13 +26,14 @@ io.on("connection", (socket) => {
 
   eventSocketRouter(io, socket);
 });
+const errorHandler = require("./mvc/middlewares/errorHandlingMiddleware");
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(errorHandler);
 /*
 //
   ROUTES
@@ -55,6 +56,8 @@ app.use("/api/event", eventRouter);
   START SERVER
 //
 */
+
+
 const PORT = process.env.PORT || 3001;
 
 const start = async () => {

@@ -30,58 +30,28 @@ const createTokens = (userID) => {
 };
 
 exports.authController = {
-  signUp: async (req, res) => {
+  logIn: async (req, res) => {
     try {
-      const { email, username, password } = req.body;
-      // if (
-      //   (await UserSchema.findOne({ email })) ||
-      //   (await UserSchema.findOne({ username }))
-      // ) {
-      //   res.status(400).json({ message: "Такой пользователь уже есть" });
-      // }
-      // const hashedPassword = await bcrypt.hash(password, 5);
-      // const newUser = new UserSchema({
-      //   email,
-      //   password: hashedPassword,
-      //   username,
-      // });
-      // newUser.save();
-      // const { accessToken, refreshToken } = createTokens(newUser._id);
-      // res.status(200).json({ accessToken, refreshToken });
+      const { email, tabel } = req.body;
+
+      const user = await UserSchema.findOne({ tabel });
+      if (!user) res.status(400).json({ message: "Пользователь не найден" });
+
+      const password = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+
       const mailOption = {
         from: "dcatserver@gmail.com",
         to: email,
         subject: "Письмо отправленно через nodejs",
-        text: "Ваш пароль для входа: 12345",
+        text: `Ваш пароль для входа: ${password}`,
       };
-
       transporter.sendMail(mailOption);
-      res.status(200);
-    } catch (error) {
-      res.status(500).json({ message: "server error" });
-    }
-  },
-  logIn: async (req, res) => {
-    try {
-      const { email, password } = req.body;
-
-      const user = await UserSchema.findOne({ email });
-      if (!user) res.status(400).json({ message: "Пользователь не найден" });
-
-      const isMatch = await bcrypt.compare(password, user.password);
-
-      if (!isMatch) res.status(400).json({ message: "пароли не совпадают" });
 
       const { accessToken, refreshToken } = createTokens(user._id);
 
-      res.status(200).json({ accessToken, refreshToken });
+      res.status(200).json({ accessToken, refreshToken, password });
     } catch (error) {
       res.status(500).json({ message: "server error" });
     }
-  },
-  refresh: async (req, res) => {
-    const userID = req.userID;
-    const { accessToken, refreshToken } = createTokens(userID);
-    res.status(200).json({ accessToken, refreshToken });
   },
 };

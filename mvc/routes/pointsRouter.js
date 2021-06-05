@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { pointsController } = require("../controllers/points");
+const { pointsController } = require("../controllers/pointsController");
 const router = Router();
 
 router.post("/accrual", pointsController.accrual);

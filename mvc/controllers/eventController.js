@@ -46,7 +46,6 @@ async function getEvents(req, res) {
 }
 
 async function createEvent(req, res) {
-  console.log(req.body);
   try {
     const { userId: creator, departmentId, sportId } = req.body;
 

@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { leaderboard } = require("../controllers/leaderboard");
+const { leaderboard } = require("../controllers/leaderboardController");
 const router = Router();
 
 router.get("/", leaderboard.get);

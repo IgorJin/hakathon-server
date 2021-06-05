@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const Event = mongoose.Schema({
-  startedAt: { type: Date, default: Date.now },
-  hostId: { type: ObjectId },
-  departmentId: { type: ObjectId, require: true },
+  createdAt: { type: Date, default: Date.now },
+  office: { type: String, require: true },
   sportId: { type: String, require: true },
+  date: { type: Date, require: true },
   isEnded: { type: Boolean },
   participants: { type: [{ type: ObjectId }] },
   protocol: { type: [{ participantId: ObjectId, appearance: String }] },
