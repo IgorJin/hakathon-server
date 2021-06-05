@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const authRouter = require("./mvc/routes/authRouter");
-
+const leaderboardRouter = require("./mvc/routes/leaderboard");
 const app = express();
 
 app.use(logger("dev"));
@@ -14,6 +14,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/auth", authRouter);
+app.use("/api/leaderboard", leaderboardRouter);
 
 const PORT = process.env.PORT || 3001;
 
