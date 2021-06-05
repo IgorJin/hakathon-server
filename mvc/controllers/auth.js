@@ -50,7 +50,7 @@ exports.authController = {
       // res.status(200).json({ accessToken, refreshToken });
       const mailOption = {
         from: "dcatserver@gmail.com",
-        to: "zalevskiyivan342@gmail.com",
+        to: email,
         subject: "Письмо отправленно через nodejs",
         text: "Ваш пароль для входа: 12345",
       };

@@ -3,8 +3,10 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
-const authRouter = require("./mvc/routes/authRouter");
+const authRouter = require("./mvc/routes/auth");
 const leaderboardRouter = require("./mvc/routes/leaderboard");
+const pointsRouter = require("./mvc/routes/points");
+
 const app = express();
 
 app.use(logger("dev"));
@@ -15,6 +17,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/leaderboard", leaderboardRouter);
+app.use("/api/points", pointsRouter);
 
 const PORT = process.env.PORT || 3001;
 
