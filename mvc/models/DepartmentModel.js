@@ -4,6 +4,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const IDepartment = mongoose.Schema({
   internalId: { type: String, require: true },
   region: { type: String, require: true },
+  value: { type: Number, require: true, default: 0 },
 });
 
 module.exports = mongoose.model("Department", IDepartment);
