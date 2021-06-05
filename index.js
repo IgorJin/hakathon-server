@@ -4,11 +4,28 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 
-const authRouter = require("./mvc/routes/authRouter");
-const eventRouter = require("./mvc/routes/eventRouter"); 
-const departmentRouter = require("./mvc/routes/departmentRouter"); 
-
 const app = express();
+const http = require("http");
+const server = http.createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:8080",
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+});
+
+const authRouter = require("./mvc/routes/authRouter");
+const eventRouter = require("./mvc/routes/eventRouter");
+const departmentRouter = require("./mvc/routes/departmentRouter");
+const eventSocketRouter = require("./mvc/routes/eventSocketRouter");
+
+io.on("connection", (socket) => {
+  console.log("Create socket connection");
+  io.emit('chat message', {mesage: 'somemessaage'})
+
+  eventSocketRouter(io, socket);
+});
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -22,7 +39,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //
 */
 
-app.use("/alive", (req, res) => res.status(200).send('SERVER IS ALIVE'))
+app.use("/alive", (req, res) => res.status(200).send("SERVER IS ALIVE"));
 
 //AUTH
 app.use("/api/auth", authRouter);
@@ -30,10 +47,8 @@ app.use("/api/auth", authRouter);
 //DEPARTMENT
 app.use("/api/department", departmentRouter);
 
-
 //EVENT
 app.use("/api/event", eventRouter);
-
 
 /*
 //
@@ -58,6 +73,8 @@ const start = async () => {
   }
 };
 
-app.listen(PORT, () => console.log("Server has been started on port ", PORT));
+server.listen(PORT, () =>
+  console.log("Server has been started on port ", PORT)
+);
 
 start();

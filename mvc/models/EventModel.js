@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const Event = mongoose.Schema({
-  createdAt: { type: Date, default: Date.now },
-  creator: { type: ObjectId },
+  startedAt: { type: Date, default: Date.now },
+  hostId: { type: ObjectId },
   departmentId: { type: ObjectId, require: true },
   sportId: { type: String, require: true },
-  participants: { type: [{ userId: ObjectId, team: String, status: String }] },
-  protocol: {type: [{ participantId: ObjectId, appearance: String }]}
+  isEnded: { type: Boolean },
+  participants: { type: [{ type: ObjectId }] },
+  protocol: { type: [{ participantId: ObjectId, appearance: String }] },
 });
-
 
 Event.methods.toDTO = function () {
   return {
