@@ -37,7 +37,7 @@ async function getEvents(req, res) {
       const event = await findEventById(id);
 
       if (!event) res.send(400).json({ message: "событие не найдено" });
-      return res.json([event]);
+      return res.json(event);
     }
     if (moth) {
       const events = await findEvents(limit, skip, moth);
