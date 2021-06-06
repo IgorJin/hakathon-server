@@ -38,11 +38,13 @@ exports.authController = {
       const { tabel, password } = req.body;
       console.log(password)
       const hashedPassword = await bcrypt.hash(password, 5);
-      console.log(hashedPassword)
+      // console.log(hashedPassword)
       const user = await UserSchema.findOne({ tabel });
       console.log(user.password)
+      console.log(bcrypt.compareSync(password, user.password))
+      console.log(bcrypt.compareSync(password, hashedPassword))
 
-      if (!user || user.password != hashedPassword) {
+      if (!user || !bcrypt.compareSync(password, user.password)) {
         res.status(401).json({ message: "Пользователь не найден или неверно указан пароль" });
         return;
       }
@@ -106,6 +108,8 @@ exports.authController = {
       const { email } = req.body;
 
       const user = await UserSchema.findOne({ email: email });
+
+      console.log(user)
 
       if (!user) {
         res.status(404).json({
