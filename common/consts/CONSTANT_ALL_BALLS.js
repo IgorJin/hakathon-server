@@ -7,6 +7,22 @@ const CONSTANT_ALL_BALLS = {
     lose: 5,
     best_player: 7,
   },
+  hocckey: {
+    goal: 20,
+    assists: 10, // = goal pass
+    captan: 10,
+    win: 20,
+    lose: 5,
+    best_player: 7,
+  },
+  tennis: {
+    goal: 20,
+    assists: 10, // = goal pass
+    captan: 10,
+    win: 20,
+    lose: 5,
+    best_player: 7,
+  },
   basketball: {
     goal: 20,
     assists: 10,

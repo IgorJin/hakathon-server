@@ -3,6 +3,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const multer = require("multer");
 
 const app = express();
 const http = require("http");
@@ -11,7 +12,7 @@ const io = require("socket.io")(server, {
   cors: {
     origin: "http://localhost:8080",
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: true,
   },
 });
 
@@ -23,7 +24,7 @@ const eventSocketRouter = require("./mvc/routes/eventSocketRouter");
 
 io.on("connection", (socket) => {
   console.log("Create socket connection");
-  io.emit('chat message', {mesage: 'somemessaage'})
+  io.emit("chat message", { mesage: "somemessaage" });
 
   eventSocketRouter(io, socket);
 });
@@ -40,6 +41,17 @@ app.use(errorHandler);
   ROUTES
 //
 */
+
+app.use(express.static(__dirname));
+
+app.use(multer({ dest: "uploads" }).any());
+
+app.post("/api/upload", function (req, res, next) {
+  let filedata = req.files;
+  console.log(filedata);
+  if (!filedata) res.send("Ошибка при загрузке файла");
+  else res.send("Файл загружен");
+});
 
 app.use("/alive", (req, res) => res.status(200).send("SERVER IS ALIVE"));
 
@@ -61,7 +73,6 @@ app.use(errorHandler);
   START SERVER
 //
 */
-
 
 const PORT = process.env.PORT || 3001;
 
