@@ -4,8 +4,9 @@ const Event = require("../models/EventModel");
 const Message = require("../models/MessageModel");
 
 const createMessage = async (participant, eventId, text) => {
+  await Message.remove({});
   await Message.create({ participant, eventId, text });
-  return Message.find()
+  return Message.find();
 };
 
 const getBySocketId = async (socketId) => {
@@ -20,11 +21,7 @@ const setParticipantStatus = async (participant, connection) => {
   );
 };
 
-const getOrCreate = async (
-  socket,
-  eventId,
-  userId
-) => {
+const getOrCreate = async (socket, eventId, userId) => {
   let participant = await Participants.findOneAndUpdate(
     { userId },
     {
@@ -128,7 +125,9 @@ async function takeMessage(io, socket, data) {
   io.to(eventId).emit("event:messages", { messages });
 }
 
-function testMessage(io, socket, data) {
+async function testMessage(io, socket, data) {
+  await Message.remove({});
+
   console.log("HERE POST TEST MSG:  ==== > ", data);
 }
 

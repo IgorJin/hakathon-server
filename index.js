@@ -48,7 +48,6 @@ app.use(multer({ dest: "uploads" }).any());
 
 app.post("/api/upload", function (req, res, next) {
   let filedata = req.files;
-  console.log(filedata);
   if (!filedata) res.send("Ошибка при загрузке файла");
   else res.send("Файл загружен");
 });
